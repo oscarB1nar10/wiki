@@ -21,3 +21,4 @@ def title(request, **callback_kwargs):
         })
     else:
         return render(request, "encyclopedia/error_page.html")
+
