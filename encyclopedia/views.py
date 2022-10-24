@@ -23,3 +23,18 @@ def title(request, **callback_kwargs):
     else:
         return render(request, "encyclopedia/error_page.html")
 
+
+def searh(request):
+    query = request.GET.get("q")
+    entries = util.get_coincidence_entries(query)
+    if entries is not None and len(entries) == 1 and entries[0].lower() == query.lower():
+        return render(request, "encyclopedia/title.html", {
+            "title": query,
+            "entrie": util.get_entry(query)
+        })
+    elif len(entries) >= 1:
+        return render(request, "encyclopedia/search_results.html", {
+            "entries": entries
+        })
+    else:
+        return render(request, "encyclopedia/error_search.html")

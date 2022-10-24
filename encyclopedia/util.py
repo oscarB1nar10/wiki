@@ -35,3 +35,14 @@ def get_entry(title):
         return f.read().decode("utf-8")
     except FileNotFoundError:
         return None
+
+
+def get_coincidence_entries(query):
+    """
+   Returns a list of all names of encyclopedia entries that contains the query.
+   """
+    _, filenames = default_storage.listdir("entries")
+    return list(sorted(re.sub(r"\.md$", "", filename)
+                       for filename in filenames
+                       if filename.endswith(".md") and query.lower() in filename.lower()
+                       ))
