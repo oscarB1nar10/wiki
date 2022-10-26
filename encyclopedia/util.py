@@ -46,3 +46,15 @@ def get_coincidence_entries(query):
                        for filename in filenames
                        if filename.endswith(".md") and query.lower() in filename.lower()
                        ))
+
+
+def entry_exist(entry_title):
+    """
+    Returns a boolean value indicating if the entry title already exist.
+    """
+    _, filenames = default_storage.listdir("entries")
+    title_format = entry_title+".md"
+    if title_format in filenames:
+        return True
+    else:
+        return False

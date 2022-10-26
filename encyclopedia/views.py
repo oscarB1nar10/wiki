@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from numpy import uint
 
+from encyclopedia.models import NewPageForm
+
 from . import util
 
 
@@ -21,7 +23,9 @@ def title(request, **callback_kwargs):
             "entrie": util.get_entry(title)
         })
     else:
-        return render(request, "encyclopedia/error_page.html")
+        return render(request, "encyclopedia/error_page.html", {
+            "error": "The request page was not found"
+        })
 
 
 def searh(request):
@@ -37,4 +41,37 @@ def searh(request):
             "entries": entries
         })
     else:
-        return render(request, "encyclopedia/error_search.html")
+        return render(request, "encyclopedia/error_page.html", {
+            "error": "No result was found with that entry"
+        })
+
+
+def new_page(request):
+    return render(request, "encyclopedia/new_page.html", {
+        "form": NewPageForm()
+    })
+
+
+def save_page(request):
+    if request.method == "POST":
+        form = NewPageForm(request.POST)
+        if form.is_valid():
+            page_title = form.cleaned_data["title"]
+            if util.entry_exist(page_title):
+                return render(request, "encyclopedia/new_page.html", {
+                    "error": "Page with that title already exists",
+                    "form": form
+                })
+            else:
+                page_content = form.cleaned_data["content"]
+                util.save_entry(page_title, page_content)
+
+                # Render the page after save it
+                return render(request, "encyclopedia/title.html", {
+                    "title": page_title,
+                    "entrie": util.get_entry(page_title)
+                })
+        else:
+            return render(request, "encyclopedia/new_page.html", {
+                "form": form
+            })
