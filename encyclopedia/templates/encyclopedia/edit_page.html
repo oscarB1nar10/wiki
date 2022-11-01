@@ -2,18 +2,13 @@
 
 {% block body %}
 
-<form action="{% url 'save_page' %}" method="post">
+<form action="{% url 'update_page' %}" method="post">
     {% csrf_token %}
     {% if error != "" and error is not None %}
         <div class="alert alert-danger" role="alert">{{ error }}</div>
     {% endif %}
-    
-    {% for field in form %}
-        <div style="margin-top: 8px;">
-            {{field}}
-        </div>
-    {% endfor %}
-
+    <div style="display: none;">{{ form.title }}</div>
+    <div style="margin-top: 8px;"> {{ form.content }}</div>
     <div style="margin-top: 10px;">
         <button type="submit" class="btn btn-primary mb-3">Save</button>
     </div>

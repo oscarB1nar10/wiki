@@ -75,3 +75,34 @@ def save_page(request):
             return render(request, "encyclopedia/new_page.html", {
                 "form": form
             })
+
+
+def edit_page(request, **callback_kwargs):
+    title = callback_kwargs['title']
+    entrie = util.get_entry(title)
+
+    form_data = {'title': title, 'content': entrie}
+
+    return render(request, "encyclopedia/edit_page.html", {
+        "form": NewPageForm(form_data)
+    })
+
+
+def update_page(request):
+    if request.method == "POST":
+        form = NewPageForm(request.POST)
+        if form.is_valid():
+            page_title = form.cleaned_data["title"]
+            page_content = form.cleaned_data["content"]
+            util.save_entry(page_title, page_content)
+
+            return render(request, "encyclopedia/index.html", {
+                "entries": util.list_entries(),
+                "util": util
+            })
+
+        else:
+            return render(request, "encyclopedia/new_page.html", {
+                "error": "Error updating the page",
+                "form": form
+            })
