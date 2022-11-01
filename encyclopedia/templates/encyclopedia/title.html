@@ -1,9 +1,13 @@
 {% extends "encyclopedia/layout.html" %}
 
+{% load markdownify %}
+
 {% block title %}
     {{ title }}
 {% endblock %}
 
 {% block body %}
-    {{ entrie }}
+    {{ entrie | markdownify}}
+
+    <a style="margin: 8px;"href="{% url 'edit_page' title=title %}">Edit</a>
 {% endblock %}

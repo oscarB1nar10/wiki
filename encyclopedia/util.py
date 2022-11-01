@@ -58,3 +58,4 @@ def entry_exist(entry_title):
         return True
     else:
         return False
+
