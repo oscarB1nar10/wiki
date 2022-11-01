@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from numpy import uint
+import random
 
 from encyclopedia.models import NewPageForm
 
@@ -106,3 +107,14 @@ def update_page(request):
                 "error": "Error updating the page",
                 "form": form
             })
+
+
+def random_page(request):
+    entries = util.list_entries()
+    random_number = random.randint(0, len(entries)-1)
+    entry_title = entries[random_number].replace(".md", "")
+
+    return render(request, "encyclopedia/title.html", {
+        "title": entry_title,
+        "entrie": util.get_entry(entry_title)
+    })
